@@ -29,28 +29,6 @@ func main() {
 		log.Fatalf("Server failed: %v", err)
 	}
 }
-func greetHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	name := r.URL.Query().Get("name")
-	if name == "" {
-		respondJSON(w, http.StatusBadRequest, Response{
-			Message: "Missing 'name' parameter",
-		})
-		return
-	}
-
-	respondJSON(w, http.StatusOK, Response{
-		Message: fmt.Sprintf("Hello, %s!", name),
-		Data: map[string]string{
-			"name":    name,
-			"request": r.URL.RawQuery,
-		},
-	})
-}
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
@@ -74,6 +52,28 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 				"/api/time",
 				"/api/greet?name=YOUR_NAME",
 			},
+		},
+	})
+}
+func greetHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		respondJSON(w, http.StatusBadRequest, Response{
+			Message: "Missing 'name' parameter",
+		})
+		return
+	}
+
+	respondJSON(w, http.StatusOK, Response{
+		Message: fmt.Sprintf("Hello, %s!", name),
+		Data: map[string]string{
+			"name":    name,
+			"request": r.URL.RawQuery,
 		},
 	})
 }
