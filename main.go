@@ -13,6 +13,7 @@ type Response struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
+// Запуск сервера на 80 порту
 func main() {
 	mux := http.NewServeMux()
 
@@ -23,7 +24,7 @@ func main() {
 
 	wrappedMux := loggingMiddleware(mux)
 
-	log.Println("Starting server on :80")
+	log.Println("Starting Super Super server on :80")
 	err := http.ListenAndServe(":80", wrappedMux)
 	if err != nil {
 		log.Fatalf("Server failed: %v", err)
