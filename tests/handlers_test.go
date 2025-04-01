@@ -78,7 +78,6 @@ func TestApiHandler(t *testing.T) {
 			response.Message, expected.Message)
 	}
 
-	// Проверка данных
 	responseData, ok := response.Data.(map[string]interface{})
 	if !ok {
 		t.Fatal("response data is not a map")
@@ -90,7 +89,6 @@ func TestApiHandler(t *testing.T) {
 			responseData["version"], expectedData["version"])
 	}
 
-	// Проверка маршрутов
 	responseRoutes, ok := responseData["routes"].([]interface{})
 	if !ok {
 		t.Fatal("routes data is not a slice")
