@@ -6,7 +6,7 @@ on:
 
 env:
   IMAGE_NAME: goback-app  # Название образа (замените на своё)
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}  # Логин Docker Hub из секретов
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}  # Логин Docker Hub из сwwекретов
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}        # Токен Docker Hub из секретов
 
 jobs:
