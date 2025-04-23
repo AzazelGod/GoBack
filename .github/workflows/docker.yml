@@ -6,32 +6,28 @@ on:
 
 env:
   IMAGE_NAME: goback-app  # Название образа (замените на своё)
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}  # Логин Der Hub из секретов
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}  # Логин Docker Hub из секретов
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}        # Токен Docker Hub из секретов
 
-
 jobs:
-  build-push:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Step 2: Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
 
-      # Step 3: Build and push Docker image
-      - name: Build and push Docker image
-        run: |
-          IMAGE_NAME="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          echo "Building image: $IMAGE_NAME"
-          docker build . -t $IMAGE_NAME || { echo "Failed to build image"; exit 1; }
-
-          echo "Pushing image: $IMAGE_NAME"
-          docker push $IMAGE_NAME || { echo "Failed to push image"; exit 1; }
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
